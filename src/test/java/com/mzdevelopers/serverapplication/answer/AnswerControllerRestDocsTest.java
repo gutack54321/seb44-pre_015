@@ -164,7 +164,7 @@ public class AnswerControllerRestDocsTest {
 
         Answer mockResultAnswer =  new Answer();
         mockResultAnswer.setAnswerId(1L);
-        given(answerService.updateAnswer(Mockito.any(Answer.class))).willReturn(mockResultAnswer);
+        given(answerService.updateAnswer(Mockito.any(Answer.class),Mockito.anyLong())).willReturn(mockResultAnswer);
         AnswerDto.Response patchResponse = new AnswerDto.Response(patchAnswerId,
                 "다시생각해보니 물어보세요",
                 0,

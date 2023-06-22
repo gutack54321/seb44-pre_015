@@ -46,19 +46,19 @@ public class AnswerController {
     @PatchMapping("/{answer-id}")
     public ResponseEntity patchAnswer(@PathVariable("answer-id")@Positive long answerId,
                                       @Valid@RequestBody AnswerDto.Patch requestBody){
-        requestBody.setAnswerId(answerId);
-        Answer answer = answerService.updateAnswer(mapper.answerPatchToAnswer(requestBody));
+
+        Answer answer = answerService.updateAnswer(mapper.answerPatchToAnswer(requestBody),answerId);
         return new ResponseEntity<>(mapper.answerToAnswerResponse(answer), HttpStatus.OK);
     }
 
-//    @GetMapping("/{answer-id}")
-//    public ResponseEntity getAnswer(
-//            @PathVariable("answer-id") @Positive long answerId) {
-//        Answer answer = answerService.findAnswer(answerId);
-//        AnswerDto.Response response = mapper.answerToAnswerResponse(answer);
-//
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
+    @GetMapping("/{answer-id}")
+    public ResponseEntity getAnswer(
+            @PathVariable("answer-id") @Positive long answerId) {
+        Answer answer = answerService.findAnswer(answerId);
+        AnswerDto.Response response = mapper.answerToAnswerResponse(answer);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 //    @GetMapping
 //    public ResponseEntity getAnswers(@Positive @RequestParam int page,
@@ -86,5 +86,19 @@ public class AnswerController {
         AnswerVoteCountDto response = new AnswerVoteCountDto();
         response.setTotalVoteCount(answerService.votesCount(answerId, memberId));
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/{answer-id}/selection/{member-id}")
+    public ResponseEntity<?> selectAnswer(@PathVariable("answer-Id") Long answerId,
+                                        @PathVariable("member-Id") Long memberId) {
+        System.out.println(answerId);
+        System.out.println(memberId);
+        System.out.println("service before");
+        boolean selectBool = answerService.updateSelection(answerId, memberId);
+
+        System.out.println(answerId);
+        System.out.println(memberId);
+        System.out.println("service after");
+        return new ResponseEntity<>(selectBool, HttpStatus.OK);
     }
 }

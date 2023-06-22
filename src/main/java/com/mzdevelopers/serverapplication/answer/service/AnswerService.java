@@ -43,9 +43,9 @@ public class AnswerService {
 
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public Answer updateAnswer(Answer answer){
-        Answer findAnswer = findVerifiedAnswer(answer.getAnswerId());
-        Member findMember = memberRepository.findById(answer.getMember().getMemberId()).orElseThrow(()->new RuntimeException("멤버를 찾을 수 없습니다."));
+    public Answer updateAnswer(Answer answer, long answerId){
+        Answer findAnswer = findVerifiedAnswer(answerId);
+        Member findMember = memberRepository.findById(findAnswer.getMember().getMemberId()).orElseThrow(()->new RuntimeException("멤버를 찾을 수 없습니다."));
 
         if(findAnswer.getMember().getMemberId()!=findMember.getMemberId()){
             throw new RuntimeException("수정할 권한이 없습니다.");
@@ -53,10 +53,9 @@ public class AnswerService {
 
         Optional.ofNullable(answer.getDetail())
                 .ifPresent(detail -> findAnswer.setDetail(detail));
-        Optional.ofNullable(answer.isSolutionStatus())
-                .ifPresent(solutionStatus -> findAnswer.setSolutionStatus(solutionStatus));
 
-        return answerRepository.save(findAnswer);
+
+        return answerRepository.saveAndFlush(findAnswer);
     }
 
 
@@ -118,5 +117,24 @@ public class AnswerService {
     public Member findByMemberId(Long memberId){
         Optional<Member> findMember = memberRepository.findById(memberId);
         return findMember.orElseThrow(() -> new IllegalArgumentException("No Search Member: " + memberId));
+    }
+
+    public Boolean updateSelection(long answerId, long memberId){
+        System.out.println(answerId);
+        System.out.println("updateSelection,answerId, findAnswer before");
+        Answer findAnswer = answerRepository.findById(answerId).orElseThrow();
+
+        System.out.println(findAnswer.getAnswerId());
+
+        System.out.println("updateSelection,answerId, findAnswer after");
+
+        System.out.println(findAnswer.getQuestion().getMember().getMemberId());
+        System.out.println("updateSelection,memberId, question before");
+
+        if(findAnswer.getQuestion().getMember().getMemberId() ==memberId){
+            findAnswer.setSolutionStatus(!findAnswer.isSolutionStatus());
+        }
+        answerRepository.save(findAnswer);
+        return findAnswer.isSolutionStatus();
     }
 }

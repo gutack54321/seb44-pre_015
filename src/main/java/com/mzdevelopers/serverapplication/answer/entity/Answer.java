@@ -30,7 +30,7 @@ public class Answer {
     private int votesCount;
 
     @Column(nullable = false)
-    private boolean solutionStatus=false;
+    private boolean solutionStatus;
 
     @OneToMany(mappedBy = "answer")
     private List<Comment> comments;
