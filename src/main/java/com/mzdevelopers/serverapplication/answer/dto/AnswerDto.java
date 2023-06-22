@@ -33,7 +33,6 @@ public class AnswerDto {
     @Getter
     @Setter
     @AllArgsConstructor
-    @Builder
     public static class Response{
         private  long answerId;
 
@@ -49,5 +48,18 @@ public class AnswerDto {
 
         private boolean answerVoteByMember;
         private List<Comment> comments;
+
+        @Builder
+        public Response(long answerId, String detail, int votesCount,
+                        boolean solutionStatus, long questionId, long memberId,
+                        List<Comment> comments){
+            this.answerId=answerId;
+            this.detail=detail;
+            this.votesCount=votesCount;
+            this.solutionStatus=solutionStatus;
+            this.questionId=questionId;
+            this.memberId=memberId;
+            this.comments=comments;
+        }
     }
 }
