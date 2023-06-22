@@ -27,7 +27,7 @@ public class AnswerDto {
     public static class Patch{
 
         private String detail;
-
+        private boolean solutionStatus;
     }
 
     @Getter
