@@ -13,16 +13,15 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
-	asciidoctorExtensions
 }
 
 repositories {
 	mavenCentral()
 }
 
-ext {
-	set('snippetsDir', file("build/generated-snippets"))
-}
+//ext {
+//	set('snippetsDir', file("build/generated-snippets"))
+//}
 dependencies {
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc' // API 문서화
 	asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'//
@@ -53,30 +52,32 @@ dependencies {
 
 
 }
-
-task testWithSnippets(type: Test) {
-	outputs.dir snippetsDir
+tasks.named('test') {
 	useJUnitPlatform()
 }
+//task testWithSnippets(type: Test) {
+//	outputs.dir snippetsDir
+//	useJUnitPlatform()
+//}
+//
+//tasks.named('asciidoctor') {
+//	dependsOn testWithSnippets
+//	inputs.dir snippetsDir
+//}
+//task copyDocument(type: Copy) {
+//	dependsOn asciidoctor
+//	from file("${asciidoctor.outputDir}")
+//	into file("src/main/resources/static/docs")
+//}
 
-tasks.named('asciidoctor') {
-	dependsOn testWithSnippets
-	inputs.dir snippetsDir
-}
-task copyDocument(type: Copy) {
-	dependsOn asciidoctor
-	from file("${asciidoctor.outputDir}")
-	into file("src/main/resources/static/docs")
-}
-
-build {
-	dependsOn copyDocument
-}
-
-// (10)
-bootJar {
-	dependsOn copyDocument
-	from ("${asciidoctor.outputDir}") {
-		into 'static/docs'
-	}
-}
+//build {
+//	dependsOn copyDocument
+//}
+//
+//// (10)
+//bootJar {
+//	dependsOn copyDocument
+//	from ("${asciidoctor.outputDir}") {
+//		into 'static/docs'
+//	}
+//}
