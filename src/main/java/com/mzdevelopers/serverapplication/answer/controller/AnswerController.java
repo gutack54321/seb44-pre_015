@@ -88,9 +88,9 @@ public class AnswerController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/{answer-id}/selection/{member-id}")
-    public ResponseEntity<?> selectAnswer(@PathVariable("answer-Id") Long answerId,
-                                        @PathVariable("member-Id") Long memberId) {
+    @GetMapping("/selection")
+    public ResponseEntity<?> selectAnswer(@RequestParam Long answerId,
+                                          @RequestParam Long memberId) {
         System.out.println(answerId);
         System.out.println(memberId);
         System.out.println("service before");
