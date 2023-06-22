@@ -46,7 +46,7 @@ public class QuestionController {
     }
 
     // 질문 가져오기 + 애플리케이션 사용자이면 view 증가
-    @GetMapping("/{questionId}/{memberId}")
+    @GetMapping("/get/{questionId}/{memberId}")
     public ResponseEntity<QuestionResponseDto> getQuestion(@PathVariable("questionId") long questionId,
                                                            @PathVariable long memberId) {
         QuestionResponseDto findQuestion = questionService.getQuestion(questionId, memberId);
@@ -85,7 +85,7 @@ public class QuestionController {
 
     // api 별 질문 리스트 반환
     @CrossOrigin
-    @GetMapping("/{api}")
+    @GetMapping("/get/{api}")
     public ResponseEntity<?> getQuestionsByAPI(@PathVariable("api") String api,
                                                @RequestParam(defaultValue = "0") int page,
                                                @RequestParam(defaultValue = "10") int size) {

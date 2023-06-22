@@ -48,7 +48,7 @@ public class SecurityConfiguration {
                 .and()
 
                 .authorizeHttpRequests() // URL 별로 접근 권한 설정
-                .antMatchers("/", "/h2/**", "/auth/**", "/oauth2/**", "/test").permitAll() // 이 경로들은 아무나 접근 가능
+                .antMatchers("/", "/h2/**", "/auth/**", "/oauth2/**", "/test","/questions/get/**").permitAll() // 이 경로들은 아무나 접근 가능
                 .anyRequest().authenticated() // 그 외 경로들은 인증 받은 사람만 접근가능
                 .and()
 
