@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -44,11 +43,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.setHeader("Authorization", token);
         response.setHeader("UID",String.valueOf(optionalMember.get().getMemberId()));
         log.info("{}", token);
-
-        Cookie tokenCookie = new Cookie("token", token);
-        tokenCookie.setPath("http://localhost:5173/");
-        tokenCookie.setHttpOnly(true);
-        response.addCookie(tokenCookie);
 
         String redirectUrl = "http://localhost:5173/";
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
