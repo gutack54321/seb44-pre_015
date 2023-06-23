@@ -132,11 +132,15 @@ public class AnswerService {
 
         if(findAnswer.getQuestion().getMember().getMemberId() ==memberId){
             findAnswer.setSolutionStatus(!findAnswer.isSolutionStatus());
+            Question findQuestion = questionRepository.findById(findAnswer.getQuestion().getQuestionId())
+                    .orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
+            findQuestion.setSolutionStatus(!findQuestion.isSolutionStatus());
+            answerRepository.save(findAnswer);
+            questionRepository.save(findQuestion);
         }
         else{
             throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
         }
-        answerRepository.save(findAnswer);
         return findAnswer.isSolutionStatus();
     }
 }
