@@ -53,7 +53,8 @@ public class SecurityConfiguration {
                 .and()
 
                 .oauth2Login()
-                .defaultSuccessUrl("/test")
+                .redirectionEndpoint().baseUri("http://localhost:5173/")
+                .and()
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService)
                 .and()
