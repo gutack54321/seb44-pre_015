@@ -1,6 +1,8 @@
 package com.mzdevelopers.serverapplication.oauth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mzdevelopers.serverapplication.exception.BusinessLogicException;
+import com.mzdevelopers.serverapplication.exception.ExceptionCode;
 import com.mzdevelopers.serverapplication.jwt.Token;
 import com.mzdevelopers.serverapplication.jwt.TokenProvider;
 import com.mzdevelopers.serverapplication.jwt.TokenService;
@@ -42,6 +44,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         log.info("토큰 발행 시작");
 
         Optional<Member> optionalMember = memberRepository.findByEmail(memberDto.getEmail());
+        if(optionalMember.isEmpty()){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }
 
         String token = tokenProvider.create(optionalMember.get());
         String uid = String.valueOf(optionalMember.get().getMemberId());

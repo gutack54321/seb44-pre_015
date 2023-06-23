@@ -1,6 +1,8 @@
 package com.mzdevelopers.serverapplication.answer.dto;
 
+import com.mzdevelopers.serverapplication.comment.dto.CommentDto;
 import com.mzdevelopers.serverapplication.comment.entity.Comment;
+import com.mzdevelopers.serverapplication.member.dto.MemberInfoDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,22 +46,24 @@ public class AnswerDto {
 
         private long questionId;
 
-        private long memberId;
+        private MemberInfoDto memberInfoDto;
 
         private boolean answerVoteByMember;
-        private List<Comment> comments;
+        private List<CommentDto.Response> comments;
+        private String createdAt;
+        private String updatedAt;
 
         @Builder
         public Response(long answerId, String detail, int votesCount,
-                        boolean solutionStatus, long questionId, long memberId,
-                        List<Comment> comments){
+                        boolean solutionStatus, long questionId,
+                         String createdAt, String updatedAt){
             this.answerId=answerId;
             this.detail=detail;
             this.votesCount=votesCount;
             this.solutionStatus=solutionStatus;
             this.questionId=questionId;
-            this.memberId=memberId;
-            this.comments=comments;
+            this.createdAt=createdAt;
+            this.updatedAt=updatedAt;
         }
     }
 }

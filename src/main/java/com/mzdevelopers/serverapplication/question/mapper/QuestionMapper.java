@@ -33,7 +33,7 @@ public interface QuestionMapper {
         questionResponseDto.setAnswerCount(question.getAnswerCount());
         questionResponseDto.setVotesCount(question.getVotesCount());
         questionResponseDto.setViewCount(question.getViewCount());
-        questionResponseDto.setMemberId(question.getMember().getMemberId());
+
         questionResponseDto.setCreatedAt(String.valueOf(question.getCreatedAt()));
         questionResponseDto.setUpdatedAt(String.valueOf(question.getUpdatedAt()));
 

@@ -1,5 +1,7 @@
 package com.mzdevelopers.serverapplication.member.service;
 
+import com.mzdevelopers.serverapplication.exception.BusinessLogicException;
+import com.mzdevelopers.serverapplication.exception.ExceptionCode;
 import com.mzdevelopers.serverapplication.member.entity.Member;
 import com.mzdevelopers.serverapplication.member.repository.MemberRepository;
 import com.mzdevelopers.serverapplication.question.entity.Question;
@@ -22,6 +24,11 @@ public class MemberService {
     public List<Question> getMembersQuestions(long memberId){
 
         Member member = memberRepository.findByMemberId(memberId);
+
+        if(member==null){
+            new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }
+
         return questionRepository.findByMember(member);
     }
 
