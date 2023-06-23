@@ -35,11 +35,11 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf() // csrf 기능
-                .disable() // 안씀
+                .csrf()
+                .disable()
                 .cors().disable()
-                .headers() // 여기서부터
-                .frameOptions().disable() // 여기까지는 h2-console 접근 가능하게 하는 역할
+                .headers()
+                .frameOptions().disable()
                 .and()
 
                 .formLogin().disable()
@@ -47,14 +47,12 @@ public class SecurityConfiguration {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
 
-                .authorizeHttpRequests() // URL 별로 접근 권한 설정
-                .antMatchers("/", "/h2/**", "/auth/**", "/oauth2/**", "/test","/questions/get/**").permitAll() // 이 경로들은 아무나 접근 가능
-                .anyRequest().authenticated() // 그 외 경로들은 인증 받은 사람만 접근가능
+                .authorizeHttpRequests()
+                .antMatchers("/", "/h2/**", "/auth/**", "/oauth2/**", "/test","/questions/get/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
 
                 .oauth2Login()
-                .redirectionEndpoint().baseUri("http://localhost:5173/")
-                .and()
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService)
                 .and()
