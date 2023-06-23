@@ -46,7 +46,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         tokenCookie.setPath("/"); // Set the cookie to be valid for all paths
         tokenCookie.setMaxAge(36000); // Set the cookie expiration time (in seconds)
         tokenCookie.setHttpOnly(true); // Set the cookie to be accessible only through HTTP
-        tokenCookie.setSecure(true);
+//        tokenCookie.setSecure(true);
 
 
         response.setHeader("Authorization", token);
