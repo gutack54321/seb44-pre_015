@@ -19,7 +19,7 @@ public class MemberService {
         this.questionRepository = questionRepository;
     }
 
-    public List<Question> getQuestions(long memberId){
+    public List<Question> getMembersQuestions(long memberId){
 
         Member member = memberRepository.findByMemberId(memberId);
         return questionRepository.findByMember(member);
