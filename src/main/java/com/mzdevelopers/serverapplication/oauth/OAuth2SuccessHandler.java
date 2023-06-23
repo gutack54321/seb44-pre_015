@@ -42,6 +42,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String token = tokenProvider.create(optionalMember.get());
         response.setHeader("Authorization", token);
         response.setHeader("UID",String.valueOf(optionalMember.get().getMemberId()));
+        response.getWriter().print("<script>localStorage.setItem('token', '" + token + "');</script>");
 
         log.info("{}", token);
 

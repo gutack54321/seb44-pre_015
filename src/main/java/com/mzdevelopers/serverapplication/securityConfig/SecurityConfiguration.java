@@ -51,7 +51,6 @@ public class SecurityConfiguration {
                 .antMatchers("/", "/h2/**", "/auth/**", "/oauth2/**", "/test","/questions/get/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-
                 .oauth2Login()
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService)
