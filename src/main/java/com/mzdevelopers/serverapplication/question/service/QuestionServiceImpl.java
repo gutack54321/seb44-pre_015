@@ -170,14 +170,14 @@ public class QuestionServiceImpl implements QuestionService{
         if (optionalQuestionVote.isEmpty()) {
             QuestionVote questionVote = QuestionVote.builder().question(findQuestion).member(findMember).build();
             findQuestion.updateVoteCount(true);
-            questionVoteRepository.save(questionVote);
+            questionVoteRepository.saveAndFlush(questionVote);
         } else {
             QuestionVote findQuestionVote = optionalQuestionVote.get();
             findQuestionVote.updateVote();
-            questionVoteRepository.save(findQuestionVote);
+            questionVoteRepository.saveAndFlush(findQuestionVote);
             findQuestion.updateVoteCount(findQuestionVote.isQuestionVoted());
         }
-        Question updatedQuestion = questionRepository.save(findQuestion);
+        Question updatedQuestion = questionRepository.saveAndFlush(findQuestion);
         return updatedQuestion.getVotesCount();
     }
     // ------------------------------------------------------------- 종아요 증가 or 감소

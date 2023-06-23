@@ -103,11 +103,11 @@ public class AnswerService {
         if (optionalAnswerVote.isEmpty()) {
             AnswerVote answerVote = AnswerVote.builder().answer(findAnswer).member(findMember).build();
             findAnswer.updateVoteCount(true);
-            answerVoteRepository.save(answerVote);
+            answerVoteRepository.saveAndFlush(answerVote);
         } else {
             AnswerVote findAnswerVote = optionalAnswerVote.get();
             findAnswerVote.updateVote();
-            answerVoteRepository.save(findAnswerVote);
+            answerVoteRepository.saveAndFlush(findAnswerVote);
             findAnswer.updateVoteCount(findAnswerVote.isAnswerVoted());
         }
         Answer updatedAnswer = answerRepository.save(findAnswer);
@@ -135,8 +135,8 @@ public class AnswerService {
             Question findQuestion = questionRepository.findById(findAnswer.getQuestion().getQuestionId())
                     .orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
             findQuestion.setSolutionStatus(!findQuestion.isSolutionStatus());
-            answerRepository.save(findAnswer);
-            questionRepository.save(findQuestion);
+            answerRepository.saveAndFlush(findAnswer);
+            questionRepository.saveAndFlush(findQuestion);
         }
         else{
             throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
