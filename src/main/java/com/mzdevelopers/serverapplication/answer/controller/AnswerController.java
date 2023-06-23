@@ -85,7 +85,7 @@ public class AnswerController {
                                         @PathVariable Long memberId) {
         AnswerVoteCountDto response = new AnswerVoteCountDto();
         response.setTotalVoteCount(answerService.votesCount(answerId, memberId));
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);//a
     }
 
     @GetMapping("/selection")
