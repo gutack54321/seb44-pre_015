@@ -47,8 +47,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         tokenCookie.setMaxAge(36000); // Set the cookie expiration time (in seconds)
         tokenCookie.setHttpOnly(true); // Set the cookie to be accessible only through HTTP
 //        tokenCookie.setSecure(true);
-
-
+//df
         response.setHeader("Authorization", token);
         response.setHeader("UID",String.valueOf(optionalMember.get().getMemberId()));
         response.addCookie(tokenCookie);
