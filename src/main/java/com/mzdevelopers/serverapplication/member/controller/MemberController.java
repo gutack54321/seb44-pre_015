@@ -1,5 +1,7 @@
 package com.mzdevelopers.serverapplication.member.controller;
 
+import com.mzdevelopers.serverapplication.exception.BusinessLogicException;
+import com.mzdevelopers.serverapplication.exception.ExceptionCode;
 import com.mzdevelopers.serverapplication.member.dto.MemberResponseDto;
 import com.mzdevelopers.serverapplication.member.entity.Member;
 import com.mzdevelopers.serverapplication.member.mapper.MemberMapper;
