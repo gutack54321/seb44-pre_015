@@ -5,6 +5,8 @@ import com.mzdevelopers.serverapplication.answer.entity.Answer;
 import com.mzdevelopers.serverapplication.answer.mapper.AnswerMapper;
 import com.mzdevelopers.serverapplication.answervote.entity.AnswerVote;
 import com.mzdevelopers.serverapplication.answervote.repository.AnswerVoteRepository;
+import com.mzdevelopers.serverapplication.exception.BusinessLogicException;
+import com.mzdevelopers.serverapplication.exception.ExceptionCode;
 import com.mzdevelopers.serverapplication.member.entity.Member;
 import com.mzdevelopers.serverapplication.member.repository.MemberRepository;
 import com.mzdevelopers.serverapplication.question.dto.QuestionResponseDto;
@@ -50,11 +52,11 @@ public class QuestionServiceImpl implements QuestionService{
     public long createQuestion(Question question, List<TagNameDto> tags) {
 
 
-        Optional<Member> findMember = memberRepository.findById(question.getMember().getMemberId());//.orElseThrow(()->new IllegalArgumentException("사용자를 찾을 수 없습니다."))
+        Member findMember = memberRepository.findById(question.getMember().getMemberId()).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
 
 
-        question.setMember(findMember.get());
+        question.setMember(findMember);
         Question savedQuestion = questionRepository.save(question);
 
 
@@ -107,7 +109,7 @@ public class QuestionServiceImpl implements QuestionService{
             findQuestion.update(title, detail);
             return questionRepository.save(findQuestion);
         } else {
-            throw new IllegalArgumentException("수정할 권한이 없습니다: " + memberId);
+            throw new BusinessLogicException(ExceptionCode.CANNOT_CHANGE_QUESTION);
         }
     }
 
@@ -117,7 +119,7 @@ public class QuestionServiceImpl implements QuestionService{
         if(findQuestion.getMember().getMemberId() == memberId)
             questionRepository.delete(findQuestion);
         else
-            throw new IllegalArgumentException("삭제할 권한이 없습니다: " + memberId);
+            throw new BusinessLogicException(ExceptionCode.CANNOT_DELETE_QUESTION);
     }
 
     // -------------------------------------------------------------- 질문 CRUD
@@ -167,12 +169,12 @@ public class QuestionServiceImpl implements QuestionService{
     }
     public Question findByQuestionId(Long questionId) {
         Optional<Question> findQuestion = questionRepository.findById(questionId);
-        return findQuestion.orElseThrow(() -> new IllegalArgumentException("No Search Question: " + questionId));
+        return findQuestion.orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
     }
 
     public Member findByMemberId(Long memberId){
         Optional<Member> findMember = memberRepository.findById(memberId);
-        return findMember.orElseThrow(() -> new IllegalArgumentException("No Search Member: " + memberId));
+        return findMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
     public List<Tag> findByTagId(List<TagNameDto> tagNameDtoList) {
