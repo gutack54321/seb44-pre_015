@@ -1,6 +1,7 @@
 package com.mzdevelopers.serverapplication.question.mapper;
 
 import com.mzdevelopers.serverapplication.member.entity.Member;
+import com.mzdevelopers.serverapplication.question.dto.QuestionPatchRequestDto;
 import com.mzdevelopers.serverapplication.question.dto.QuestionRequestDto;
 import com.mzdevelopers.serverapplication.question.dto.QuestionResponseDto;
 import com.mzdevelopers.serverapplication.question.entity.Question;
@@ -39,4 +40,6 @@ public interface QuestionMapper {
 
         return questionResponseDto;
     };
+
+    QuestionPatchRequestDto questionToQuestionPatchRequestDto(Question question);
 }
