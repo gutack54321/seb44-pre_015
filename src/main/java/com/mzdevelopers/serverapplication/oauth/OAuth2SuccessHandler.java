@@ -13,6 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletException;
@@ -20,6 +22,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Optional;
 
 @Slf4j
@@ -54,8 +57,23 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         log.info("{}", token);//df
 
-        String redirectUrl = "http://localhost:5173/";
+        String redirectUrl = createURI(token).toString();
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
 
+    }
+
+    private URI createURI(String accessToken) {
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("access_token", accessToken);
+
+        return UriComponentsBuilder
+                .newInstance()
+                .scheme("http")
+                .host("localhost")
+                .port(5173)
+//                .path("/receive-token.html")
+                .queryParams(queryParams)
+                .build()
+                .toUri();
     }
 }
