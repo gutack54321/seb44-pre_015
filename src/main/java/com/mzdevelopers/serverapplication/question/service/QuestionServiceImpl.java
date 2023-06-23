@@ -14,6 +14,7 @@ import com.mzdevelopers.serverapplication.member.dto.MemberInfoDto;
 import com.mzdevelopers.serverapplication.member.dto.MemberResponseDto;
 import com.mzdevelopers.serverapplication.member.entity.Member;
 import com.mzdevelopers.serverapplication.member.repository.MemberRepository;
+import com.mzdevelopers.serverapplication.question.dto.QuestionPatchRequestDto;
 import com.mzdevelopers.serverapplication.question.dto.QuestionResponseDto;
 import com.mzdevelopers.serverapplication.question.mapper.QuestionMapper;
 import com.mzdevelopers.serverapplication.question.stub.StubAnswer;
@@ -21,6 +22,7 @@ import com.mzdevelopers.serverapplication.question.entity.Question;
 import com.mzdevelopers.serverapplication.question.entity.QuestionVote;
 import com.mzdevelopers.serverapplication.question.repository.QuestionRepository;
 import com.mzdevelopers.serverapplication.question.repository.QuestionVoteRepository;
+import com.mzdevelopers.serverapplication.tag.dto.SelectTagDto;
 import com.mzdevelopers.serverapplication.tag.dto.TagDto;
 import com.mzdevelopers.serverapplication.tag.dto.TagNameDto;
 import com.mzdevelopers.serverapplication.tag.entity.QuestionTag;
@@ -139,6 +141,32 @@ public class QuestionServiceImpl implements QuestionService{
         }
     }
 
+    public QuestionPatchRequestDto getPatchQuestion(long questionId, long memberId) {
+        Question findQuestion = findByQuestionId(questionId);
+        if(findQuestion.getMember().getMemberId() != memberId)
+            throw new BusinessLogicException(ExceptionCode.CANNOT_CHANGE_QUESTION);
+
+        List<SelectTagDto> selectTagDtoList = new ArrayList<>();
+        List<Tag> tagList = tagRepository.findAll();
+        for(Tag tag : tagList){
+            SelectTagDto selectTagDto = new SelectTagDto();
+            selectTagDto.setSelect(false);
+            selectTagDto.setTagName(tag.getTagName());
+            selectTagDtoList.add(selectTagDto);
+        }
+        for(QuestionTag questionTag : findQuestion.getQuestionTags()){
+            for(SelectTagDto selectTagDto : selectTagDtoList){
+                if(questionTag.getTag().getTagName()==selectTagDto.getTagName()){
+                    selectTagDto.setSelect(true);
+                }
+            }
+        }
+
+        QuestionPatchRequestDto questionPatchRequestDto = questionMapper.questionToQuestionPatchRequestDto(findQuestion);
+        questionPatchRequestDto.setTags(selectTagDtoList);
+        return questionPatchRequestDto;
+    }
+
     @Override
     public Question updateQuestion(long questionId, String title, String detail, long memberId) {
         Question findQuestion = findByQuestionId(questionId);
@@ -253,5 +281,6 @@ public class QuestionServiceImpl implements QuestionService{
         }
         return tagNameDtoList;
     }
+
 
 }

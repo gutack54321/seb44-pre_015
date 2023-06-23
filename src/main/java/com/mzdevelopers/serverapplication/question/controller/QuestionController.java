@@ -1,15 +1,11 @@
 package com.mzdevelopers.serverapplication.question.controller;
 
-import com.mzdevelopers.serverapplication.question.dto.QuestionPatchDto;
-import com.mzdevelopers.serverapplication.question.dto.QuestionRequestDto;
-import com.mzdevelopers.serverapplication.question.dto.QuestionResponseDto;
-import com.mzdevelopers.serverapplication.question.dto.QuestionVoteCountDto;
+import com.mzdevelopers.serverapplication.question.dto.*;
 import com.mzdevelopers.serverapplication.question.entity.Question;
 import com.mzdevelopers.serverapplication.question.mapper.QuestionMapper;
 import com.mzdevelopers.serverapplication.question.service.QuestionServiceImpl;
 import com.mzdevelopers.serverapplication.tag.dto.TagNameDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +47,14 @@ public class QuestionController {
                                                            @PathVariable long memberId) {
         QuestionResponseDto findQuestion = questionService.getQuestion(questionId, memberId);
         return ResponseEntity.ok(findQuestion);
+    }
+
+    // 질문 수정 페이지 전용 GET
+    @GetMapping("/get/patch/{questionId}/{memberId}")
+    public ResponseEntity<?> getPatchQuestion(@PathVariable("questionId") long questionId,
+                                              @PathVariable("memberId") long memberId){
+        QuestionPatchRequestDto requestDto = questionService.getPatchQuestion(questionId, memberId);
+        return ResponseEntity.ok(requestDto);
     }
 
     // 질문 수정

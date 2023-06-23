@@ -1,5 +1,6 @@
 package com.mzdevelopers.serverapplication.question.service;
 
+import com.mzdevelopers.serverapplication.question.dto.QuestionPatchRequestDto;
 import com.mzdevelopers.serverapplication.question.dto.QuestionResponseDto;
 import com.mzdevelopers.serverapplication.question.entity.Question;
 import com.mzdevelopers.serverapplication.tag.dto.TagNameDto;
@@ -21,6 +22,8 @@ public interface QuestionService {
     public long createQuestion(Question question, List<TagNameDto> tags);
 
     public QuestionResponseDto getQuestion(long questionId, long memberId);
+
+    public QuestionPatchRequestDto getPatchQuestion(long questionId, long memberId);
 
     // List, Page 형식으로 클라이언트에게 보냄
 
