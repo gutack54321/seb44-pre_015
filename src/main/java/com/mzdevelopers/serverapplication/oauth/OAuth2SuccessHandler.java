@@ -18,6 +18,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -43,18 +44,20 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         Optional<Member> optionalMember = memberRepository.findByEmail(memberDto.getEmail());
 
         String token = tokenProvider.create(optionalMember.get());
-        response.setHeader("Authorization", token);
-        response.setHeader("UID",String.valueOf(optionalMember.get().getMemberId()));
+        String uid = String.valueOf(optionalMember.get().getMemberId());
+//        response.setHeader("Authorization", token);
+//        response.setHeader("UID",);
         log.info("{}", token);//dd
 
-        String redirectUrl = createURI(token).toString();
+        String redirectUrl = createURI(token, uid).toString();
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
 
     }
 
-    private URI createURI(String accessToken) {
+    private URI createURI(String accessToken, String uid) {
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("access_token", accessToken);
+        queryParams.add("UID", uid);
 
         return UriComponentsBuilder
                 .newInstance()
