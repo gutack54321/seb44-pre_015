@@ -2,6 +2,7 @@ package com.mzdevelopers.serverapplication.comment.dto;
 
 import com.mzdevelopers.serverapplication.answer.entity.Answer;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,5 +38,20 @@ public class CommentDto {
         private String commentDetail;
         private long answerId;
         private long memberId;
+
+        private String createdAt;
+        private String updatedAt;
+
+        @Builder
+        public Response(long commentId,String commentDetail,
+                        long answerId, long memberId,
+                        String createdAt, String updatedAt){
+            this.commentId=commentId;
+            this.commentDetail=commentDetail;
+            this.answerId=answerId;
+            this.memberId=memberId;
+            this.createdAt=createdAt;
+            this.updatedAt=updatedAt;
+        }
     }
 }

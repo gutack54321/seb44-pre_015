@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mzdevelopers.serverapplication.answervote.entity.AnswerVote;
 import com.mzdevelopers.serverapplication.comment.entity.Comment;
 import com.mzdevelopers.serverapplication.member.entity.Member;
+import com.mzdevelopers.serverapplication.question.entity.BaseEntity;
 import com.mzdevelopers.serverapplication.question.entity.Question;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @Table(name = "ANSWERS")
-public class Answer {
+public class Answer extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long answerId;

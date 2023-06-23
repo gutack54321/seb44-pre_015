@@ -48,11 +48,13 @@ public class AnswerDto {
 
         private boolean answerVoteByMember;
         private List<Comment> comments;
+        private String createdAt;
+        private String updatedAt;
 
         @Builder
         public Response(long answerId, String detail, int votesCount,
                         boolean solutionStatus, long questionId, long memberId,
-                        List<Comment> comments){
+                        List<Comment> comments, String createdAt, String updatedAt){
             this.answerId=answerId;
             this.detail=detail;
             this.votesCount=votesCount;
@@ -60,6 +62,8 @@ public class AnswerDto {
             this.questionId=questionId;
             this.memberId=memberId;
             this.comments=comments;
+            this.createdAt=createdAt;
+            this.updatedAt=updatedAt;
         }
     }
 }

@@ -35,6 +35,8 @@ public interface AnswerMapper {
                 .questionId(answer.getQuestion().getQuestionId())
                 .memberId(answer.getMember().getMemberId())
                 .comments(answer.getComments())
+                .createdAt(String.valueOf(answer.getCreatedAt()))
+                .updatedAt(String.valueOf(answer.getUpdatedAt()))
                 .build();
 //        AnswerDto.Response answerResponse = new AnswerDto.Response(
 //                answer.getAnswerId(),
@@ -46,6 +48,8 @@ public interface AnswerMapper {
 //                answer.getAnswerVotes().
 //                answer.getComments()
 //        );
+//        answerResponse.setCreatedAt(String.valueOf(answer.getCreatedAt()));
+//        answerResponse.setUpdatedAt(String.valueOf(answer.getUpdatedAt()));
         return answerResponse;
     };
 
