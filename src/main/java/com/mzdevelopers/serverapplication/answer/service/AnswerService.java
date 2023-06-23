@@ -4,6 +4,8 @@ import com.mzdevelopers.serverapplication.answer.entity.Answer;
 import com.mzdevelopers.serverapplication.answer.repository.AnswerRepository;
 import com.mzdevelopers.serverapplication.answervote.entity.AnswerVote;
 import com.mzdevelopers.serverapplication.answervote.repository.AnswerVoteRepository;
+import com.mzdevelopers.serverapplication.exception.BusinessLogicException;
+import com.mzdevelopers.serverapplication.exception.ExceptionCode;
 import com.mzdevelopers.serverapplication.member.entity.Member;
 import com.mzdevelopers.serverapplication.member.repository.MemberRepository;
 import com.mzdevelopers.serverapplication.question.entity.Question;
@@ -31,8 +33,10 @@ public class AnswerService {
 
 
     public Answer createAnswer(Answer answer){
-        Question findQuestion = questionRepository.findByQuestionId(answer.getQuestion().getQuestionId());
-        Member findMember = memberRepository.findById(answer.getMember().getMemberId()).orElseThrow(()->new RuntimeException("멤버를 찾을 수 없습니다."));
+        Question findQuestion = questionRepository.findByQuestionId(answer.getQuestion().getQuestionId())
+                .orElseThrow(()->new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
+        Member findMember = memberRepository.findById(answer.getMember().getMemberId())
+                .orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         answer.setMember(findMember);
 
         Answer saveAnswer = answerRepository.save(answer);
@@ -45,10 +49,10 @@ public class AnswerService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public Answer updateAnswer(Answer answer, long answerId){
         Answer findAnswer = findVerifiedAnswer(answerId);
-        Member findMember = memberRepository.findById(findAnswer.getMember().getMemberId()).orElseThrow(()->new RuntimeException("멤버를 찾을 수 없습니다."));
+        Member findMember = memberRepository.findById(findAnswer.getMember().getMemberId()).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         if(findAnswer.getMember().getMemberId()!=findMember.getMemberId()){
-            throw new RuntimeException("수정할 권한이 없습니다.");
+            throw new BusinessLogicException(ExceptionCode.CANNOT_CHANGE_ANSWER);
         }
 
         Optional.ofNullable(answer.getDetail())
@@ -62,7 +66,8 @@ public class AnswerService {
     @Transactional(readOnly = true)
     public Answer findAnswer(long answerId){
 
-        return answerRepository.findByAnswerId(answerId).orElseGet(null);
+        return answerRepository.findById(answerId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ANSWER_NOT_FOUND));
     }
 
 
@@ -72,10 +77,10 @@ public class AnswerService {
     }
     public void deleteAnswer(long answerId, long memberId) {
         Answer findAnswer = findVerifiedAnswer(answerId);
-        Member findMember = memberRepository.findById(memberId).orElseThrow(()->new RuntimeException("멤버를 찾을 수 없습니다."));
+        Member findMember = memberRepository.findById(memberId).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         if(findAnswer.getMember().getMemberId()!=findMember.getMemberId()){
-            throw new RuntimeException("삭제할 권한이 없습니다.");
+            throw new BusinessLogicException(ExceptionCode.CANNOT_DELETE_ANSWER);
         }
 
 
@@ -87,7 +92,7 @@ public class AnswerService {
     public Answer findVerifiedAnswer(long answerId){
         Optional<Answer> optionalAnswer =
                 answerRepository.findByAnswerId(answerId);
-        return optionalAnswer.orElseThrow();
+        return optionalAnswer.orElseThrow(() -> new BusinessLogicException(ExceptionCode.ANSWER_NOT_FOUND));
     }
 
 
@@ -120,19 +125,16 @@ public class AnswerService {
     }
 
     public Boolean updateSelection(long answerId, long memberId){
-        System.out.println(answerId);
-        System.out.println("updateSelection,answerId, findAnswer before");
-        Answer findAnswer = answerRepository.findById(answerId).orElseThrow();
 
-        System.out.println(findAnswer.getAnswerId());
+        Answer findAnswer = answerRepository.findById(answerId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ANSWER_NOT_FOUND));
 
-        System.out.println("updateSelection,answerId, findAnswer after");
-
-        System.out.println(findAnswer.getQuestion().getMember().getMemberId());
-        System.out.println("updateSelection,memberId, question before");
 
         if(findAnswer.getQuestion().getMember().getMemberId() ==memberId){
             findAnswer.setSolutionStatus(!findAnswer.isSolutionStatus());
+        }
+        else{
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
         }
         answerRepository.save(findAnswer);
         return findAnswer.isSolutionStatus();
