@@ -45,5 +45,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         log.info("{}", token);
 
+        String redirectUrl = "http://localhost:5173/";
+        getRedirectStrategy().sendRedirect(request, response, redirectUrl);
+
     }
 }
