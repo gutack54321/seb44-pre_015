@@ -1,10 +1,8 @@
 package com.mzdevelopers.serverapplication.comment.dto;
 
 import com.mzdevelopers.serverapplication.answer.entity.Answer;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import com.mzdevelopers.serverapplication.member.dto.MemberInfoDto;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
@@ -32,24 +30,25 @@ public class CommentDto {
     }
 
     @Getter
-    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Response{
         private long commentId;
         private String commentDetail;
         private long answerId;
-        private long memberId;
+        @Setter
+        private MemberInfoDto memberInfoDto;
 
         private String createdAt;
         private String updatedAt;
 
         @Builder
         public Response(long commentId,String commentDetail,
-                        long answerId, long memberId,
+                        long answerId, MemberInfoDto memberInfoDto,
                         String createdAt, String updatedAt){
             this.commentId=commentId;
             this.commentDetail=commentDetail;
             this.answerId=answerId;
-            this.memberId=memberId;
+            this.memberInfoDto=memberInfoDto;
             this.createdAt=createdAt;
             this.updatedAt=updatedAt;
         }

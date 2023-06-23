@@ -37,7 +37,7 @@ public interface CommentMapper {
                 .commentId(comment.getCommentId())
                 .commentDetail(comment.getCommentDetail())
                 .answerId(comment.getAnswer().getAnswerId())
-                .memberId(comment.getMember().getMemberId())
+//                .memberId(comment.getMember().getMemberId())
                 .createdAt(String.valueOf(comment.getCreatedAt()))
                 .updatedAt(String.valueOf(comment.getUpdatedAt()))
 

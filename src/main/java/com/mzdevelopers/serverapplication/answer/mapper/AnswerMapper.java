@@ -33,8 +33,6 @@ public interface AnswerMapper {
                 .votesCount(answer.getVotesCount())
                 .solutionStatus(answer.isSolutionStatus())
                 .questionId(answer.getQuestion().getQuestionId())
-                .memberId(answer.getMember().getMemberId())
-                .comments(answer.getComments())
                 .createdAt(String.valueOf(answer.getCreatedAt()))
                 .updatedAt(String.valueOf(answer.getUpdatedAt()))
                 .build();

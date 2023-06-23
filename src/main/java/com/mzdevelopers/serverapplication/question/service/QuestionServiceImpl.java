@@ -5,8 +5,13 @@ import com.mzdevelopers.serverapplication.answer.entity.Answer;
 import com.mzdevelopers.serverapplication.answer.mapper.AnswerMapper;
 import com.mzdevelopers.serverapplication.answervote.entity.AnswerVote;
 import com.mzdevelopers.serverapplication.answervote.repository.AnswerVoteRepository;
+import com.mzdevelopers.serverapplication.comment.dto.CommentDto;
+import com.mzdevelopers.serverapplication.comment.entity.Comment;
+import com.mzdevelopers.serverapplication.comment.mapper.CommentMapper;
 import com.mzdevelopers.serverapplication.exception.BusinessLogicException;
 import com.mzdevelopers.serverapplication.exception.ExceptionCode;
+import com.mzdevelopers.serverapplication.member.dto.MemberInfoDto;
+import com.mzdevelopers.serverapplication.member.dto.MemberResponseDto;
 import com.mzdevelopers.serverapplication.member.entity.Member;
 import com.mzdevelopers.serverapplication.member.repository.MemberRepository;
 import com.mzdevelopers.serverapplication.question.dto.QuestionResponseDto;
@@ -46,6 +51,7 @@ public class QuestionServiceImpl implements QuestionService{
     private final MemberRepository memberRepository;
     private final QuestionMapper questionMapper;
     private final AnswerMapper answerMapper;
+    private final CommentMapper commentMapper;
     private final AnswerVoteRepository answerVoteRepository;
 
     @Override
@@ -88,18 +94,49 @@ public class QuestionServiceImpl implements QuestionService{
         else responseDto.setQuestionVoteByMember(questionVote.get().isQuestionVoted());
 
         List<AnswerDto.Response> answers = new ArrayList<>();
+        getQuestionAnswer(findQuestion, findMember, answers);
+
+        MemberInfoDto memberInfoDto = MemberInfoDto.builder()
+                .memberId(findQuestion.getMember().getMemberId())
+                .userName(findQuestion.getMember().getName())
+                .picture(findQuestion.getMember().getPicture())
+                .build();
+        responseDto.setMemberInfoDto(memberInfoDto);
+        responseDto.setAnswers(answers);
+        responseDto.setTags(findByQuestionTag(findQuestion));
+        return responseDto;
+    }
+
+    private void getQuestionAnswer(Question findQuestion, Member findMember, List<AnswerDto.Response> answers) {
         for (Answer answer : findQuestion.getAnswers()) {
-            AnswerDto.Response response = answerMapper.answerToAnswerResponse(answer);
+            AnswerDto.Response response = answerMapper
+                    .answerToAnswerResponse(answer);
             Optional<AnswerVote> answerVote = answerVoteRepository.findByAnswerAndMember(answer, findMember);
             if(answerVote.isEmpty())
                 response.setAnswerVoteByMember(false);
             else response.setAnswerVoteByMember(answerVote.get().isAnswerVoted());
+            MemberInfoDto memberInfoDto = MemberInfoDto.builder()
+                    .memberId(answer.getMember().getMemberId())
+                    .userName(answer.getMember().getName())
+                    .picture(answer.getMember().getPicture())
+                    .build();
+            response.setMemberInfoDto(memberInfoDto);
+            List<CommentDto.Response> comments= new ArrayList<>();
+            for(Comment comment : answer.getComments()){
+                CommentDto.Response commentResponse = commentMapper
+                        .commentToCommentResponse(comment);
+                MemberInfoDto memberCommentInfoDto = MemberInfoDto.builder()
+                        .memberId(comment.getMember().getMemberId())
+                        .userName(comment.getMember().getName())
+                        .picture(comment.getMember().getPicture())
+                        .build();
+
+                commentResponse.setMemberInfoDto(memberCommentInfoDto);
+                comments.add(commentResponse);
+            }
+            response.setComments(comments);
             answers.add(response);
         }
-
-        responseDto.setAnswers(answers);
-        responseDto.setTags(findByQuestionTag(findQuestion));
-        return responseDto;
     }
 
     @Override
