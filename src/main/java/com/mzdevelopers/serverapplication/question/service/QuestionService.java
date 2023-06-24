@@ -3,7 +3,9 @@ package com.mzdevelopers.serverapplication.question.service;
 import com.mzdevelopers.serverapplication.question.dto.QuestionPatchRequestDto;
 import com.mzdevelopers.serverapplication.question.dto.QuestionResponseDto;
 import com.mzdevelopers.serverapplication.question.entity.Question;
+import com.mzdevelopers.serverapplication.tag.dto.SelectTagDto;
 import com.mzdevelopers.serverapplication.tag.dto.TagNameDto;
+import com.mzdevelopers.serverapplication.tag.entity.QuestionTag;
 import com.mzdevelopers.serverapplication.tag.entity.Tag;
 
 import java.util.List;
@@ -27,7 +29,7 @@ public interface QuestionService {
 
     // List, Page 형식으로 클라이언트에게 보냄
 
-    public Question updateQuestion(long questionId, String title, String detail, long memberId);
+    public Question updateQuestion(long questionId, String title, String detail,List<TagNameDto> tags, long memberId);
 
     public void deleteQuestion(long questionId, long memberId);
 

@@ -62,11 +62,13 @@ public class QuestionController {
     public ResponseEntity<QuestionResponseDto> patchQuestion(@PathVariable("questionId") long questionId,
                                                              @PathVariable("memberId") long memberId,
                                                              @Valid @RequestBody QuestionPatchDto questionPatchDto) {
-        QuestionResponseDto responseDto = questionMapper.questionToQuestionResponseDto(questionService
-                .updateQuestion(questionId,
+        Question question = questionService.updateQuestion(questionId,
                         questionPatchDto.getTitle(),
                         questionPatchDto.getDetail(),
-                        memberId));
+                        questionPatchDto.getTags(),
+                        memberId);
+        QuestionResponseDto responseDto = questionMapper.questionToQuestionResponseDto(question);
+        responseDto.setTags(questionService.findByQuestionTag(question));
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 

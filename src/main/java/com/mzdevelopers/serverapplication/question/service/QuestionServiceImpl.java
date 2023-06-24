@@ -76,7 +76,9 @@ public class QuestionServiceImpl implements QuestionService{
                 questionTags.add(questionTag);
             }
             questionTagRepository.saveAll(questionTags);
+//            question.setQuestionTags(questionTags);
         }
+
 
         return savedQuestion.getQuestionId();
     }
@@ -167,12 +169,28 @@ public class QuestionServiceImpl implements QuestionService{
         return questionPatchRequestDto;
     }
 
+
     @Override
-    public Question updateQuestion(long questionId, String title, String detail, long memberId) {
+    public Question updateQuestion(long questionId, String title, String detail,List<TagNameDto> tags, long memberId) {
+
         Question findQuestion = findByQuestionId(questionId);
         if (findQuestion.getMember().getMemberId() == memberId) {
             findQuestion.update(title, detail);
+
+
+            if (!tags.isEmpty()) {
+                List<Tag> tagList = findByTagId(tags);
+                List<QuestionTag> questionTags = new ArrayList<>();
+                for (Tag tag : tagList) {
+                    QuestionTag questionTag = new QuestionTag(findQuestion, tag);
+                    questionTags.add(questionTag);
+                }
+                questionTagRepository.saveAll(questionTags);
+                findQuestion.setQuestionTags(questionTags);
+            }
+
             return questionRepository.save(findQuestion);
+
         } else {
             throw new BusinessLogicException(ExceptionCode.CANNOT_CHANGE_QUESTION);
         }

@@ -5,6 +5,7 @@ import com.mzdevelopers.serverapplication.question.dto.QuestionPatchRequestDto;
 import com.mzdevelopers.serverapplication.question.dto.QuestionRequestDto;
 import com.mzdevelopers.serverapplication.question.dto.QuestionResponseDto;
 import com.mzdevelopers.serverapplication.question.entity.Question;
+import com.mzdevelopers.serverapplication.question.service.QuestionServiceImpl;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -26,7 +27,6 @@ public interface QuestionMapper {
 
     default QuestionResponseDto questionToQuestionResponseDto(Question question){
         QuestionResponseDto questionResponseDto = new QuestionResponseDto();
-
         questionResponseDto.setQuestionId(question.getQuestionId());
         questionResponseDto.setTitle(question.getTitle());
         questionResponseDto.setDetail(question.getDetail());
