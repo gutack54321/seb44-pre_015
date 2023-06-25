@@ -8,6 +8,7 @@ INSERT INTO tag (tag_name, tag_description) VALUES
     ('database', 'Database management systems'),
     ('git', 'Version control system'),
     ('android', 'Android operating system'),
+    ('react', '이거슨 리액트'),
     ('ios', 'iOS operating system');
 
 INSERT INTO member (name, email, picture, answer_vote_count) VALUES
