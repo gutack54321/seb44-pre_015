@@ -1,5 +1,6 @@
 package com.mzdevelopers.serverapplication.answer.service;
 
+import com.mzdevelopers.serverapplication.answer.dto.AnswerVoteCountDto;
 import com.mzdevelopers.serverapplication.answer.entity.Answer;
 import com.mzdevelopers.serverapplication.answer.repository.AnswerRepository;
 import com.mzdevelopers.serverapplication.answervote.entity.AnswerVote;
@@ -92,22 +93,28 @@ public class AnswerService {
     }
 
 
-    public int votesCount(long answerId, long memberId) {
+    public AnswerVoteCountDto votesCount(long answerId, long memberId) {
         Answer findAnswer = findByAnswerId(answerId);
         Member findMember = findByMemberId(memberId);
         Optional<AnswerVote> optionalAnswerVote = answerVoteRepository.findByAnswerAndMember(findAnswer, findMember);
+        AnswerVote findanswerVote;
+
         if (optionalAnswerVote.isEmpty()) {
             AnswerVote answerVote = AnswerVote.builder().answer(findAnswer).member(findMember).build();
             findAnswer.updateVoteCount(true);
-            answerVoteRepository.saveAndFlush(answerVote);
+            findanswerVote = answerVoteRepository.saveAndFlush(answerVote);
         } else {
             AnswerVote findAnswerVote = optionalAnswerVote.get();
             findAnswerVote.updateVote();
-            answerVoteRepository.saveAndFlush(findAnswerVote);
+            findanswerVote =answerVoteRepository.saveAndFlush(findAnswerVote);
             findAnswer.updateVoteCount(findAnswerVote.isAnswerVoted());
         }
         Answer updatedAnswer = answerRepository.save(findAnswer);
-        return updatedAnswer.getVotesCount();
+
+        AnswerVoteCountDto answerVoteCountDto = new AnswerVoteCountDto();
+        answerVoteCountDto.setTotalVoteCount(updatedAnswer.getVotesCount());
+        answerVoteCountDto.setAnswerVoteStatus(findanswerVote.isAnswerVoted());
+        return answerVoteCountDto;
     }
 
     public Answer findByAnswerId(Long answerId) {

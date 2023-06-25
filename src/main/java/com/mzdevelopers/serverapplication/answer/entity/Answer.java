@@ -64,4 +64,7 @@ public class Answer extends BaseEntity {
     public void updateSelect(boolean solutionStatus){
         this.solutionStatus = solutionStatus;
     }
+    public void updateVoteStatus(){
+
+    }
 }

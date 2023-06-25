@@ -24,7 +24,7 @@ public class QuestionController {
 
     private final QuestionMapper questionMapper;
     private final QuestionServiceImpl questionService;
-    private final static String QUESTION_CREATE_URI = "http://localhost:8080/questions";
+    private final static String QUESTION_CREATE_URI = "ec2-13-125-172-34.ap-northeast-2.compute.amazonaws.com:8080/questions";
 
     // 질문 등록
     @PostMapping("/register")

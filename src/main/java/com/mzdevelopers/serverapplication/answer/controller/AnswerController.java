@@ -84,8 +84,7 @@ public class AnswerController {
     @GetMapping("/votes/{answerId}/{memberId}")
     public ResponseEntity<?> votesCount(@PathVariable("answerId") Long answerId,
                                         @PathVariable Long memberId) {
-        AnswerVoteCountDto response = new AnswerVoteCountDto();
-        response.setTotalVoteCount(answerService.votesCount(answerId, memberId));
+        AnswerVoteCountDto response = answerService.votesCount(answerId, memberId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
