@@ -16,6 +16,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final QuestionRepository questionRepository;
 
+
+
     public MemberService(MemberRepository memberRepository, QuestionRepository questionRepository) {
         this.memberRepository = memberRepository;
         this.questionRepository = questionRepository;
@@ -26,7 +28,7 @@ public class MemberService {
         Member member = memberRepository.findByMemberId(memberId);
 
         if(member==null){
-            new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
         }
 
         return questionRepository.findByMember(member);
