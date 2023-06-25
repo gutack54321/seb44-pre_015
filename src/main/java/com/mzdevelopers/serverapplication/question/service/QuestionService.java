@@ -2,6 +2,7 @@ package com.mzdevelopers.serverapplication.question.service;
 
 import com.mzdevelopers.serverapplication.question.dto.QuestionPatchRequestDto;
 import com.mzdevelopers.serverapplication.question.dto.QuestionResponseDto;
+import com.mzdevelopers.serverapplication.question.dto.QuestionVoteCountDto;
 import com.mzdevelopers.serverapplication.question.entity.Question;
 import com.mzdevelopers.serverapplication.tag.dto.SelectTagDto;
 import com.mzdevelopers.serverapplication.tag.dto.TagNameDto;
@@ -33,7 +34,7 @@ public interface QuestionService {
 
     public void deleteQuestion(long questionId, long memberId);
 
-    public int votesCount(long questionId, long memberId);
+    public QuestionVoteCountDto votesCount(long questionId, long memberId);
 
     public List<Question> questionsListByAPI(int page, int size, String api);
 

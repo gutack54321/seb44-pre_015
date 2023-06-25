@@ -132,14 +132,14 @@ public class AnswerService {
         Answer findAnswer = findVerifiedAnswer(answerId);
 
 
-        if(findAnswer.getQuestion().getMember().getMemberId() ==memberId){
+        if(findAnswer.getQuestion().getMember().getMemberId() == memberId){
             boolean solutionStatus=findAnswer.isSolutionStatus();
             findAnswer.updateSelect(!solutionStatus);
 
             Question findQuestion = questionRepository.findById(findAnswer.getQuestion().getQuestionId())
                     .orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
 
-            findQuestion.updateSelect(!solutionStatus);
+            findQuestion.updateSelect(findAnswer.isSolutionStatus());
             answerRepository.saveAndFlush(findAnswer);
             questionRepository.saveAndFlush(findQuestion);
         }

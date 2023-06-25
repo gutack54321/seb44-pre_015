@@ -16,6 +16,7 @@ import com.mzdevelopers.serverapplication.member.entity.Member;
 import com.mzdevelopers.serverapplication.member.repository.MemberRepository;
 import com.mzdevelopers.serverapplication.question.dto.QuestionPatchRequestDto;
 import com.mzdevelopers.serverapplication.question.dto.QuestionResponseDto;
+import com.mzdevelopers.serverapplication.question.dto.QuestionVoteCountDto;
 import com.mzdevelopers.serverapplication.question.mapper.QuestionMapper;
 import com.mzdevelopers.serverapplication.question.stub.StubAnswer;
 import com.mzdevelopers.serverapplication.question.entity.Question;
@@ -158,7 +159,7 @@ public class QuestionServiceImpl implements QuestionService{
         }
         for(QuestionTag questionTag : findQuestion.getQuestionTags()){
             for(SelectTagDto selectTagDto : selectTagDtoList){
-                if(questionTag.getTag().getTagName()==selectTagDto.getTagName()){
+                if(questionTag.getTag().getTagName().equals(selectTagDto.getTagName())){
                     selectTagDto.setSelect(true);
                 }
             }
@@ -214,23 +215,26 @@ public class QuestionServiceImpl implements QuestionService{
     // -------------------------------------------------------------- 질문 CRUD
 
     @Override
-    public int votesCount(long questionId, long memberId) {
+    public QuestionVoteCountDto votesCount(long questionId, long memberId) {
         Question findQuestion = findByQuestionId(questionId);
         Member findMember = findByMemberId(memberId);
         Optional<QuestionVote> optionalQuestionVote = questionVoteRepository.findByQuestionAndMember(findQuestion, findMember);
-
+        QuestionVote saveQuestion;
         if (optionalQuestionVote.isEmpty()) {
             QuestionVote questionVote = QuestionVote.builder().question(findQuestion).member(findMember).build();
             findQuestion.updateVoteCount(true);
-            questionVoteRepository.saveAndFlush(questionVote);
+            saveQuestion = questionVoteRepository.saveAndFlush(questionVote);
         } else {
             QuestionVote findQuestionVote = optionalQuestionVote.get();
             findQuestionVote.updateVote();
-            questionVoteRepository.saveAndFlush(findQuestionVote);
+            saveQuestion = questionVoteRepository.saveAndFlush(findQuestionVote);
             findQuestion.updateVoteCount(findQuestionVote.isQuestionVoted());
         }
         Question updatedQuestion = questionRepository.saveAndFlush(findQuestion);
-        return updatedQuestion.getVotesCount();
+        QuestionVoteCountDto questionVoteCountDto = new QuestionVoteCountDto();
+        questionVoteCountDto.setTotalVoteCount(updatedQuestion.getVotesCount());
+        questionVoteCountDto.setQuestionVoteStatus(saveQuestion.isQuestionVoted());
+        return questionVoteCountDto;
     }
     // ------------------------------------------------------------- 종아요 증가 or 감소
 

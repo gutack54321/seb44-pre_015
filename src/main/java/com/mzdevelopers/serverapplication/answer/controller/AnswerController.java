@@ -93,8 +93,6 @@ public class AnswerController {
                                           @RequestParam Long memberId) {
 
         boolean selectBool = answerService.updateSelection(answerId, memberId);
-
-
         return new ResponseEntity<>(selectBool, HttpStatus.OK);
     }
 }
