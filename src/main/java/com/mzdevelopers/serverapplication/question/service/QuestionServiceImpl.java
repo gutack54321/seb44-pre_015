@@ -179,12 +179,18 @@ public class QuestionServiceImpl implements QuestionService{
 
 
             if (!tags.isEmpty()) {
+                List<QuestionTag> findQuestionTags = findQuestion.getQuestionTags();
+                for(QuestionTag findQuestionTag:findQuestionTags){
+                    questionTagRepository.delete(findQuestionTag);
+                }
+
                 List<Tag> tagList = findByTagId(tags);
                 List<QuestionTag> questionTags = new ArrayList<>();
                 for (Tag tag : tagList) {
                     QuestionTag questionTag = new QuestionTag(findQuestion, tag);
                     questionTags.add(questionTag);
                 }
+
                 questionTagRepository.saveAll(questionTags);
                 findQuestion.setQuestionTags(questionTags);
             }
