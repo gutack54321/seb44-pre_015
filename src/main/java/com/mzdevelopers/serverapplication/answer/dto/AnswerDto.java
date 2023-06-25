@@ -25,11 +25,11 @@ public class AnswerDto {
 
     }
     @Getter
-    @AllArgsConstructor
+    @Setter
     public static class Patch{
 
         private String detail;
-        private boolean solutionStatus;
+
     }
 
     @Getter

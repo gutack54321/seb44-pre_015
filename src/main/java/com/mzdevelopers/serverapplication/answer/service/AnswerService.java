@@ -47,19 +47,15 @@ public class AnswerService {
 
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public Answer updateAnswer(Answer answer, long answerId){
+    public Answer updateAnswer(String detail, long answerId, long memberId){
         Answer findAnswer = findVerifiedAnswer(answerId);
-        Member findMember = memberRepository.findById(findAnswer.getMember().getMemberId()).orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        if(findAnswer.getMember().getMemberId()!=findMember.getMemberId()){
-            throw new BusinessLogicException(ExceptionCode.CANNOT_CHANGE_ANSWER);
+        if(findAnswer.getMember().getMemberId()==memberId){
+            findAnswer.update(detail);
+            return answerRepository.saveAndFlush(findAnswer);
         }
+        else{throw new BusinessLogicException(ExceptionCode.CANNOT_CHANGE_ANSWER);}
 
-        Optional.ofNullable(answer.getDetail())
-                .ifPresent(detail -> findAnswer.setDetail(detail));
-
-
-        return answerRepository.saveAndFlush(findAnswer);
     }
 
 
@@ -126,15 +122,17 @@ public class AnswerService {
 
     public Boolean updateSelection(long answerId, long memberId){
 
-        Answer findAnswer = answerRepository.findById(answerId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ANSWER_NOT_FOUND));
+        Answer findAnswer = findVerifiedAnswer(answerId);
 
 
         if(findAnswer.getQuestion().getMember().getMemberId() ==memberId){
-            findAnswer.setSolutionStatus(!findAnswer.isSolutionStatus());
+            boolean solutionStatus=findAnswer.isSolutionStatus();
+            findAnswer.updateSelect(!solutionStatus);
+
             Question findQuestion = questionRepository.findById(findAnswer.getQuestion().getQuestionId())
                     .orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
-            findQuestion.setSolutionStatus(!findQuestion.isSolutionStatus());
+
+            findQuestion.updateSelect(!solutionStatus);
             answerRepository.saveAndFlush(findAnswer);
             questionRepository.saveAndFlush(findQuestion);
         }

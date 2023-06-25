@@ -70,6 +70,9 @@ public class Question extends BaseEntity{
         this.title = title;
         this.detail = detail;
     }
+    public void updateSelect(boolean solutionStatus){
+        this.solutionStatus=solutionStatus;
+    }
 
     public void updateVoteCount(boolean voted) {
         if (voted) {

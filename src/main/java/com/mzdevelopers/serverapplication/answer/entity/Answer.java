@@ -58,4 +58,10 @@ public class Answer extends BaseEntity {
             votesCount--;
         }
     }
+    public void update(String detail) {
+        this.detail = detail;
+    }
+    public void updateSelect(boolean solutionStatus){
+        this.solutionStatus = solutionStatus;
+    }
 }

@@ -43,11 +43,12 @@ public class AnswerController {
         return new ResponseEntity(mapper.answerToAnswerResponse(createAnswer),HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{answer-id}")
+    @PatchMapping("/{answer-id}/{member-id}")
     public ResponseEntity patchAnswer(@PathVariable("answer-id")@Positive long answerId,
+                                      @PathVariable("member-id")@Positive long memberId,
                                       @Valid@RequestBody AnswerDto.Patch requestBody){
 
-        Answer answer = answerService.updateAnswer(mapper.answerPatchToAnswer(requestBody),answerId);
+        Answer answer = answerService.updateAnswer(requestBody.getDetail(),answerId,memberId);
         return new ResponseEntity<>(mapper.answerToAnswerResponse(answer), HttpStatus.OK);
     }
 
@@ -91,14 +92,10 @@ public class AnswerController {
     @GetMapping("/selection")
     public ResponseEntity<?> selectAnswer(@RequestParam Long answerId,
                                           @RequestParam Long memberId) {
-        System.out.println(answerId);
-        System.out.println(memberId);
-        System.out.println("service before");
+
         boolean selectBool = answerService.updateSelection(answerId, memberId);
 
-        System.out.println(answerId);
-        System.out.println(memberId);
-        System.out.println("service after");
+
         return new ResponseEntity<>(selectBool, HttpStatus.OK);
     }
 }
