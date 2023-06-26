@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS member (
 CREATE TABLE question (
     question_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
-    detail VARCHAR(255) NOT NULL,
+    detail VARCHAR(50000) NOT NULL,
     solution_status BOOLEAN NOT NULL,
     answer_count INT NOT NULL,
     votes_count INT NOT NULL,
