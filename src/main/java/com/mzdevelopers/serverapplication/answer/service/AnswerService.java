@@ -107,7 +107,7 @@ public class AnswerService {
             AnswerVote findAnswerVote = optionalAnswerVote.get();
             findAnswerVote.updateVote();
             saveAnswerVote =answerVoteRepository.saveAndFlush(findAnswerVote);
-            findAnswer.updateVoteCount(findAnswerVote.isAnswerVoted());
+            findAnswer.updateVoteCount(findAnswerVote.isAnswerVoted());//
         }
         Answer updatedAnswer = answerRepository.saveAndFlush(findAnswer);
 
