@@ -48,7 +48,6 @@ public class Answer extends BaseEntity {
     private Member member;
 
     @OneToMany(mappedBy = "answer", cascade = CascadeType.REMOVE)
-    @JsonIgnore
     private List<AnswerVote> answerVotes;
 
     public void updateVoteCount(boolean voted) {
