@@ -43,7 +43,7 @@ INSERT INTO member (name, email, picture, answer_vote_count) VALUES
     ('Jackson Phillips', 'jacksonphillips@gmail.com', 'profile29.jpg', 0),
     ('Evelyn Lewis', 'evelynlewis@gmail.com', 'profile30.jpg', 0);
 
---데이터 수 : 30
+--데이터 수 : 30개
 INSERT INTO question (title, detail, solution_status, answer_count, votes_count, view_count, member_id) VALUES
     ('Question 1', 'Detail of question 1', false, 0, 0, 0, 1),
     ('Question 2', 'Detail of question 2', false, 0, 0, 0, 2),
