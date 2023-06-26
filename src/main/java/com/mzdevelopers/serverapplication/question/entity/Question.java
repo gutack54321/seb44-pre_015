@@ -52,7 +52,7 @@ public class Question extends BaseEntity{
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     private List<QuestionVote> questionVotes;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     private List<Answer> answers;
 
     @Builder

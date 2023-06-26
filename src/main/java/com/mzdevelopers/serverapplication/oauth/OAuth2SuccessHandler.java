@@ -66,9 +66,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         return UriComponentsBuilder
                 .newInstance()
-                .scheme("http")
-                .host("localhost")
-                .port(5173)
+                .scheme("https")
+                .host("seb44-pre-015-deploy-5tp185v5s-ddaeunbb.vercel.app")
+//                .port(5173)
 //                .path("/receive-token.html")
                 .queryParams(queryParams)
                 .build()
