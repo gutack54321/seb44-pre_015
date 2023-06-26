@@ -97,23 +97,23 @@ public class AnswerService {
         Answer findAnswer = findByAnswerId(answerId);
         Member findMember = findByMemberId(memberId);
         Optional<AnswerVote> optionalAnswerVote = answerVoteRepository.findByAnswerAndMember(findAnswer, findMember);
-        AnswerVote findanswerVote;
+        AnswerVote saveAnswerVote;
 
         if (optionalAnswerVote.isEmpty()) {
             AnswerVote answerVote = AnswerVote.builder().answer(findAnswer).member(findMember).build();
             findAnswer.updateVoteCount(true);
-            findanswerVote = answerVoteRepository.saveAndFlush(answerVote);
+            saveAnswerVote = answerVoteRepository.saveAndFlush(answerVote);
         } else {
             AnswerVote findAnswerVote = optionalAnswerVote.get();
             findAnswerVote.updateVote();
-            findanswerVote =answerVoteRepository.saveAndFlush(findAnswerVote);
-            findAnswer.updateVoteCount(findAnswerVote.isAnswerVoted());
+            saveAnswerVote =answerVoteRepository.saveAndFlush(findAnswerVote);
+            findAnswer.updateVoteCount(findAnswerVote.isAnswerVoted());//
         }
-        Answer updatedAnswer = answerRepository.save(findAnswer);
+        Answer updatedAnswer = answerRepository.saveAndFlush(findAnswer);
 
         AnswerVoteCountDto answerVoteCountDto = new AnswerVoteCountDto();
         answerVoteCountDto.setTotalVoteCount(updatedAnswer.getVotesCount());
-        answerVoteCountDto.setAnswerVoteStatus(findanswerVote.isAnswerVoted());
+        answerVoteCountDto.setAnswerVoteStatus(saveAnswerVote.isAnswerVoted());
         return answerVoteCountDto;
     }
 
