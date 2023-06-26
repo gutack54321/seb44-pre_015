@@ -8,7 +8,9 @@ INSERT INTO tag (tag_name, tag_description) VALUES
     ('database', 'Database management systems'),
     ('git', 'Version control system'),
     ('android', 'Android operating system'),
+    ('react', '화이팅!'),
     ('ios', 'iOS operating system');
+
 
 --데이터 수 : 30
 INSERT INTO member (name, email, picture, answer_vote_count) VALUES
