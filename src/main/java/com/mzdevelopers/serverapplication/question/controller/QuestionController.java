@@ -45,7 +45,7 @@ public class QuestionController {
     @GetMapping("/get/{questionId}/{memberId}")
     public ResponseEntity<QuestionResponseDto> getQuestion(@PathVariable("questionId") long questionId,
                                                            @PathVariable long memberId) {
-        QuestionResponseDto findQuestion = questionService.getQuestion(questionId, memberId);
+        QuestionResponseDto findQuestion = questionService.getQuestion(questionId, memberId, "find");
         return ResponseEntity.ok(findQuestion);
     }
 
@@ -97,7 +97,7 @@ public class QuestionController {
         List<Question> questions = questionService.questionsListByAPI(page, size, api);
         List<QuestionResponseDto> responseDtoList = new ArrayList<>();
         for (Question question : questions) {
-            QuestionResponseDto dto = questionService.getQuestion(question.getQuestionId(), question.getMember().getMemberId());
+            QuestionResponseDto dto = questionService.getQuestion(question.getQuestionId(), question.getMember().getMemberId(), "api");
             responseDtoList.add(dto);
         }
         return ResponseEntity.ok(responseDtoList);

@@ -24,7 +24,7 @@ public interface QuestionService {
      */
     public long createQuestion(Question question, List<TagNameDto> tags);
 
-    public QuestionResponseDto getQuestion(long questionId, long memberId);
+    public QuestionResponseDto getQuestion(long questionId, long memberId, String flag);
 
     public QuestionPatchRequestDto getPatchQuestion(long questionId, long memberId);
 
@@ -37,8 +37,6 @@ public interface QuestionService {
     public QuestionVoteCountDto votesCount(long questionId, long memberId);
 
     public List<Question> questionsListByAPI(int page, int size, String api);
-
-//    public
 
 
 

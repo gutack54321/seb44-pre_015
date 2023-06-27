@@ -85,11 +85,11 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public QuestionResponseDto getQuestion(long questionId, long memberId) {
+    public QuestionResponseDto getQuestion(long questionId, long memberId, String flag) {
         Question findQuestion = findByQuestionId(questionId);
         Member findMember = findByMemberId(memberId);
         QuestionResponseDto responseDto = questionMapper.questionToQuestionResponseDto(findQuestion);
-        if(isRegisteredMember(memberId)){
+        if(isRegisteredMember(memberId) && !flag.equals("api")){
             findQuestion.increaseView();
             questionRepository.save(findQuestion);
         }
